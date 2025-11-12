@@ -53,6 +53,10 @@ export  abstract class Conta{
     public depositar(valor:number): void{
         this._saldo = this._saldo + valor;
     }
+    public get tipo(): number {
+  return this._tipo;
+}
+
 
     public visualizar(): void{
         let tipo: string = "";
