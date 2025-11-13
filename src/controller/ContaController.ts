@@ -36,10 +36,10 @@ export class ContaController implements ContaRepository{
 
        if(buscaConta != null){
         this.listaContas[this.listaContas.indexOf(buscaConta)] = conta;
-        console.log(colors.fg.green, "\na conta numero: "+ conta.numero+ "foi atualizada com sucesso!", colors.reset);
+        console.log(colors.fg.green, "\nA conta numero: "+ conta.numero+ " foi atualizada com sucesso!", colors.reset);
         }else{
-            console.log(colors.fg.red, "\na conta numero: " + conta.numero +
-                "não foi encontrada!", colors.reset);
+            console.log(colors.fg.red, "\nA conta numero: " + conta.numero +
+                " não foi encontrada!", colors.reset);
         }
 
     }
@@ -48,24 +48,62 @@ export class ContaController implements ContaRepository{
 
         if(buscaConta != null){
             this.listaContas.splice(this.listaContas.indexOf(buscaConta),1);
-            console.log(colors.fg.green,"\na conta numero: "+numero+
+            console.log(colors.fg.green,"\nA conta numero: "+numero+
                 " foi apagada com sucesso!", colors.reset);
          } else{
-            console.log(colors.fg.red, "\na conta numero: "+numero+
+            console.log(colors.fg.red, "\nA conta numero: "+numero+
                 "nao foi encontrada!"+ colors.reset);
 
          }
     }
     
     sacar(numero: number, valor: number): void {
-        throw new Error("Method not implemented.");
+        let conta = this.buscarNoArray(numero);
+        if(conta != null){
+            if(conta.sacar(valor)==true){
+                console.log(colors.fg.green,"\nO saque na conta numero: "+ numero+
+                    " foi efetuado com sucesso!", colors.reset);
+            }else { //adicionado extra
+            console.log(colors.fg.red, "\nSaldo insuficiente para saque na conta número: " + numero, colors.reset);
+             }
+
+        }else{//else movido para fora
+                console.log(colors.fg.red,"\nA conta numero: "+ numero+
+                    " nao foi encontrada!", colors.reset);            
+                }
     }
+
+
     depositar(numero: number, valor: number): void {
-        throw new Error("Method not implemented.");
+        let conta= this.buscarNoArray(numero);
+
+        if(conta != null){
+            conta.depositar(valor);
+            console.log(colors.fg.green,"\nO deposito na conta numero: "+ numero+
+                 " foi efetuado com sucesso!", colors.reset);                 
+        }else{
+            console.log(colors.fg.red, "\nA conta numero: "+ numero+
+                " nao foi encontrada!", colors.reset);
+        }
+
     }
     transferir(numeroOrigem: number, numeroDestino: number, valor: number): void {
-        throw new Error("Method not implemented.");
+        
+        let contaOrigem = this.buscarNoArray(numeroOrigem);
+        let contaDestino = this.buscarNoArray(numeroDestino);
+
+        if(contaOrigem != null && contaDestino != null){
+            if(contaOrigem.sacar(valor)==true){
+                contaDestino.depositar(valor);
+                console.log(colors.fg.green, "\nA transferencia da conta numero: ", + numeroOrigem +
+                    " para a conta numero: "+numeroDestino+" foi efetuada com sucesso!",colors.reset);
+            }
+        }else{
+            console.log(colors.fg.red, "\nA conta numero: " + numeroOrigem+
+                " e/ou a conta numero: "+ numeroDestino+ " nao foram encontradas!", colors.reset);
+        }
     }
+
 
     //metodos auxilares
     //gerar numero da conta
